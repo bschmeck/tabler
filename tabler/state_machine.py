@@ -51,17 +51,17 @@ class StateMachine:
         
     # Predicates
     def in_table(self):
-        return False
+        return self.state != self.States.NONE
     def in_header(self):
-        return False
+        return self.state in [self.States.HEADER, self.States.HEADER_ROW, self.States.HEADER_CELL]
     def in_body(self):
-        return False
+        return self.state in [self.States.BODY, self.States.BODY_ROW, self.States.BODY_CELL]
     def in_footer(self):
-        return False
+        return self.state in [self.States.FOOTER, self.States.FOOTER_ROW, self.States.FOOTER_CELL]
     def in_row(self):
-        return False
+        return self.state in [self.States.HEADER_ROW, self.States.BODY_ROW, self.States.FOOTER_ROW]
     def in_cell(self):
-        return False
+        return self.state in [self.States.HEADER_CELL, self.States.BODY_CELL, self.States.FOOTER_CELL]
 
     def transition(self, tag_name, tag_type):
         pass
