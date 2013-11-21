@@ -32,6 +32,9 @@ Allowed transitions are:
  * BODY ROW -> BODY
  * BODY CELL -> BODY ROW
 """
+
+import TableParser
+
 class StateMachine:
     class States:
         NONE = 'none'
@@ -63,6 +66,67 @@ class StateMachine:
     def in_cell(self):
         return self.state in [self.States.HEADER_CELL, self.States.BODY_CELL, self.States.FOOTER_CELL]
 
+    # Transitions
     def transition(self, tag_name, tag_type):
+        if tag_type not in [TableParser.START_TAG, TableParser.END_TAG]:
+            raise TransitionError("Unknown tag type: " + tag_type)
+        
+        if tag_name == 'table':
+            if tag_type == TableParser.START_TAG:
+                self.into_table()
+            else:
+                self.outof_table()
+        elif tag_name == 'thead':
+            if tag_type == TableParser.START_TAG:
+                self.into_header()
+            else:
+                self.outof_header()
+        elif tag_name == 'tbody':
+            if tag_type == TableParser.START_TAG:
+                self.into_body()
+            else:
+                self.outof_body()
+        elif tag_name == 'tfoot':
+            if tag_type == TableParser.START_TAG:
+                self.into_footer()
+            else:
+                self.outof_footer()
+        elif tag_name == 'tr':
+            if tag_type == TableParser.START_TAG:
+                self.into_row()
+            else:
+                self.outof_row()
+        elif tag_name == 'th' || tag_name == 'td':
+            if tag_type == TableParser.START_TAG:
+                self.into_cell()
+            else:
+                self.outof_cell()
+        else:
+            raise TransitionError("Unknown tag: " + tag_name)
+
+    def into_table(self):
         pass
+    def outof_table(self):
+        pass
+    def into_header(self):
+        pass
+    def outof_header(self):
+        pass
+    def into_body(self):
+        pass
+    def outof_body(self):
+        pass
+    def into_footer(self):
+        pass
+    def outof_footer(self):
+        pass
+    def into_row(self):
+        pass
+    def outof_row(self):
+        pass
+    def into_cell(self):
+        pass
+    def outof_cell(self):
+        pass
+    
     
