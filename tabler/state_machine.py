@@ -178,3 +178,9 @@ class StateMachine:
         elif self.in_footer():
             return self.outof_state(self.States.FOOTER_CELL)
         self.transition_exit_error('cell')
+
+class TransitionError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
