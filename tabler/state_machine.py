@@ -53,7 +53,7 @@ class StateMachine:
         self.states = [self.States.NONE]
 
     def state(self):
-        self.states[-1]
+        return self.states[-1]
         
     # Predicates
     def in_table(self):
