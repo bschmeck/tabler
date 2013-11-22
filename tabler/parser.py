@@ -3,6 +3,7 @@ from HTMLParser import HTMLParser, HTMLParseError
 from state_machine import StateMachine
 class TableParser(HTMLParser):
     def __init__(self):
+        HTMLParser.__init__(self)
         self.state_machine = StateMachine()
         
     def handle_starttag(self, tag, attrs):
