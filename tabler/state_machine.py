@@ -33,9 +33,9 @@ Allowed transitions are:
  * BODY CELL -> BODY ROW
 """
 
-import TableParser
-
 class StateMachine:
+    START_TAG = 'start'
+    END_TAG = 'end'
     class States:
         NONE = 'none'
         TABLE = 'table'
@@ -71,36 +71,36 @@ class StateMachine:
 
     # Transitions
     def transition(self, tag_name, tag_type):
-        if tag_type not in [TableParser.START_TAG, TableParser.END_TAG]:
+        if tag_type not in [self.START_TAG, self.END_TAG]:
             raise TransitionError("Unknown tag type: " + tag_type)
         
         if tag_name == 'table':
-            if tag_type == TableParser.START_TAG:
+            if tag_type == self.START_TAG:
                 self.into_table()
             else:
                 self.outof_table()
         elif tag_name == 'thead':
-            if tag_type == TableParser.START_TAG:
+            if tag_type == self.START_TAG:
                 self.into_header()
             else:
                 self.outof_header()
         elif tag_name == 'tbody':
-            if tag_type == TableParser.START_TAG:
+            if tag_type == self.START_TAG:
                 self.into_body()
             else:
                 self.outof_body()
         elif tag_name == 'tfoot':
-            if tag_type == TableParser.START_TAG:
+            if tag_type == self.START_TAG:
                 self.into_footer()
             else:
                 self.outof_footer()
         elif tag_name == 'tr':
-            if tag_type == TableParser.START_TAG:
+            if tag_type == self.START_TAG:
                 self.into_row()
             else:
                 self.outof_row()
-        elif tag_name == 'th' || tag_name == 'td':
-            if tag_type == TableParser.START_TAG:
+        elif tag_name == 'th' or tag_name == 'td':
+            if tag_type == self.START_TAG:
                 self.into_cell()
             else:
                 self.outof_cell()

@@ -1,17 +1,15 @@
 from HTMLParser import HTMLParser, HTMLParseError
 
+from state_machine import StateMachine
 class TableParser(HTMLParser):
-    START_TAG = 'start'
-    END_TAG = 'end'
     def __init__(self):
-        self.state_machine = Tabler.StateMachine()
+        self.state_machine = StateMachine()
         
     def handle_starttag(self, tag, attrs):
-        self.state_machine.transition(tag, START_TAG)
+        self.state_machine.transition(tag, StateMachine.START_TAG)
     
     def handle_endtag(self, tag):
-        self.state_machine.transition(tag, END_TAG)
+        self.state_machine.transition(tag, StateMachine.END_TAG)
 
     def handle_data(self, data):
         pass
-        
