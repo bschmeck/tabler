@@ -107,77 +107,74 @@ class StateMachine:
         else:
             raise TransitionError("Unknown tag: " + tag_name)
 
-    def transition_enter_error(state):
+    def transition_enter_error(self, state):
         raise TransitionError("Unable to enter " + state + " with current state " + self.state())
 
-    def transition_exit_error(state):
+    def transition_exit_error(self, state):
         raise TransitionError("Unable to exit " + state + " with current state " + self.state())
 
     def into_state(self, state, allowed_state):
         if self.state() == allowed_state:
             self.states.append(state)
         else:
-            transition_enter_error(state)
+            self.transition_enter_error(state)
 
     def outof_state(self, state):
         if self.state() == state:
             self.states.pop()
         else:
-            transition_exit_error(state)
+            self.transition_exit_error(state)
             
     def into_table(self):
-        return into_state(self.States.TABLE, self.States.NONE)
+        return self.into_state(self.States.TABLE, self.States.NONE)
     def outof_table(self):
-        return outof_state(self.States.TABLE)
+        return self.outof_state(self.States.TABLE)
     
     def into_header(self):
-        return into_state(self.States.HEADER, self.States.TABLE)
+        return self.into_state(self.States.HEADER, self.States.TABLE)
     def outof_header(self):
-        return outof_state(self.States.HEADER)
+        return self.outof_state(self.States.HEADER)
 
     def into_body(self):
-        return into_state(self.States.BODY, self.States.TABLE)
+        return self.into_state(self.States.BODY, self.States.TABLE)
     def outof_body(self):
-        return outof_state(self.States.BODY)
+        return self.outof_state(self.States.BODY)
 
     def into_footer(self):
-        return into_state(self.States.FOOTER, self.States.TABLE)
+        return self.into_state(self.States.FOOTER, self.States.TABLE)
     def outof_footer(self):
-        return outof_state(self.States.FOOTER)
+        return self.outof_state(self.States.FOOTER)
 
     def into_row(self):
         if self.in_header():
-            return into_state(self.States.HEADER_ROW, self.States.HEADER)
+            return self.into_state(self.States.HEADER_ROW, self.States.HEADER)
         elif self.in_body():
-            return into_state(self.States.BODY_ROW, self.States.BODY)
+            return self.into_state(self.States.BODY_ROW, self.States.BODY)
         elif self.in_footer():
-            return into_state(self.States.FOOTER_ROW, self.States.FOOTER)
-        transition_enter_error('row')
+            return self.into_state(self.States.FOOTER_ROW, self.States.FOOTER)
+        self.transition_enter_error('row')
     def outof_row(self):
         if self.in_header():
-            return outof_state(self.States.HEADER_ROW)
+            return self.outof_state(self.States.HEADER_ROW)
         elif self.in_body():
-            return outof_state(self.States.BODY_ROW)
+            return self.outof_state(self.States.BODY_ROW)
         elif self.in_footer():
-            return outof_state(self.States.FOOTER_ROW)
-        transition_exit_error('row')
+            return self.outof_state(self.States.FOOTER_ROW)
+        self.transition_exit_error('row')
     
     def into_cell(self):
         if self.in_header():
-            return into_state(self.States.HEADER_CELL, self.States.HEADER_ROW)
+            return self.into_state(self.States.HEADER_CELL, self.States.HEADER_ROW)
         elif self.in_body():
-            return into_state(self.States.BODY_CELL, self.States.BODY_ROW)
+            return self.into_state(self.States.BODY_CELL, self.States.BODY_ROW)
         elif self.in_footer():
-            return into_state(self.States.FOOTER_CELL, self.States.FOOTER_ROW)
-        transition_enter_error('cell')
+            return self.into_state(self.States.FOOTER_CELL, self.States.FOOTER_ROW)
+        self.transition_enter_error('cell')
     def outof_cell(self):
         if self.in_header():
-            return outof_state(self.States.HEADER_CELL)
+            return self.outof_state(self.States.HEADER_CELL)
         elif self.in_body():
-            return outof_state(self.States.BODY_CELL)
+            return self.outof_state(self.States.BODY_CELL)
         elif self.in_footer():
-            return outof_state(self.States.FOOTER_CELL)
-        transition_exit_error('cell')
-
-    
-    
+            return self.outof_state(self.States.FOOTER_CELL)
+        self.transition_exit_error('cell')
