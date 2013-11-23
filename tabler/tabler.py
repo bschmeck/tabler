@@ -5,3 +5,6 @@ class Tabler:
         self._html = html
         self.parser = TableParser()
         self.parser.feed(html)
+
+    def rows(self):
+        return []
