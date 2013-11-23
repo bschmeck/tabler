@@ -24,7 +24,7 @@ table = """<table>
 </table>"""
 
 parser = Tabler(table)
-print "There are", len(parser.rows), "rows."
+print "There are", len(parser.rows()), "rows."
 print "First names:"
-for row in parser.rows:
+for row in parser.rows():
     print row["first_name"]
