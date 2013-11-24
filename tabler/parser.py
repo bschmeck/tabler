@@ -18,10 +18,10 @@ class TableParser(HTMLParser):
         if tag == 'tr':
             if self.state_machine.in_header() and self.header_row_fn:
                 self.header_row_fn(self.cells)
-            elif self.state_machine.in_body() and self.body_row_fn:
-                self.body_row_fn(self.cells)
             elif self.state_machine.in_footer() and self.footer_row_fn:
                 self.footer_row_fn(self.cells)
+            elif self.body_row_fn:
+                self.body_row_fn(self.cells)
             self.cells = []
 
     def handle_data(self, data):

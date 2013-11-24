@@ -113,8 +113,8 @@ class StateMachine:
     def transition_exit_error(self, state):
         raise TransitionError("Unable to exit " + state + " with current state " + self.state())
 
-    def into_state(self, state, allowed_state):
-        if self.state() == allowed_state:
+    def into_state(self, state, allowed_states):
+        if self.state() in allowed_states:
             self.states.append(state)
         else:
             self.transition_enter_error(state)
@@ -126,58 +126,57 @@ class StateMachine:
             self.transition_exit_error(state)
             
     def into_table(self):
-        return self.into_state(self.States.TABLE, self.States.NONE)
+        return self.into_state(self.States.TABLE, [self.States.NONE])
     def outof_table(self):
         return self.outof_state(self.States.TABLE)
     
     def into_header(self):
-        return self.into_state(self.States.HEADER, self.States.TABLE)
+        return self.into_state(self.States.HEADER, [self.States.TABLE])
     def outof_header(self):
         return self.outof_state(self.States.HEADER)
 
     def into_body(self):
-        return self.into_state(self.States.BODY, self.States.TABLE)
+        return self.into_state(self.States.BODY, [self.States.TABLE])
     def outof_body(self):
         return self.outof_state(self.States.BODY)
 
     def into_footer(self):
-        return self.into_state(self.States.FOOTER, self.States.TABLE)
+        return self.into_state(self.States.FOOTER, [self.States.TABLE])
     def outof_footer(self):
         return self.outof_state(self.States.FOOTER)
 
     def into_row(self):
         if self.in_header():
-            return self.into_state(self.States.HEADER_ROW, self.States.HEADER)
-        elif self.in_body():
-            return self.into_state(self.States.BODY_ROW, self.States.BODY)
+            return self.into_state(self.States.HEADER_ROW, [self.States.HEADER])
         elif self.in_footer():
-            return self.into_state(self.States.FOOTER_ROW, self.States.FOOTER)
-        self.transition_enter_error('row')
+            return self.into_state(self.States.FOOTER_ROW, [self.States.FOOTER])
+        else:
+            return self.into_state(self.States.BODY_ROW, [self.States.BODY, self.States.TABLE])
+
     def outof_row(self):
         if self.in_header():
             return self.outof_state(self.States.HEADER_ROW)
-        elif self.in_body():
-            return self.outof_state(self.States.BODY_ROW)
         elif self.in_footer():
             return self.outof_state(self.States.FOOTER_ROW)
-        self.transition_exit_error('row')
-    
+        else:
+            return self.outof_state(self.States.BODY_ROW)
+            
     def into_cell(self):
         if self.in_header():
-            return self.into_state(self.States.HEADER_CELL, self.States.HEADER_ROW)
-        elif self.in_body():
-            return self.into_state(self.States.BODY_CELL, self.States.BODY_ROW)
+            return self.into_state(self.States.HEADER_CELL, [self.States.HEADER_ROW])
         elif self.in_footer():
-            return self.into_state(self.States.FOOTER_CELL, self.States.FOOTER_ROW)
-        self.transition_enter_error('cell')
+            return self.into_state(self.States.FOOTER_CELL, [self.States.FOOTER_ROW])
+        else:
+            return self.into_state(self.States.BODY_CELL, [self.States.BODY_ROW])
+
     def outof_cell(self):
         if self.in_header():
             return self.outof_state(self.States.HEADER_CELL)
-        elif self.in_body():
-            return self.outof_state(self.States.BODY_CELL)
         elif self.in_footer():
             return self.outof_state(self.States.FOOTER_CELL)
-        self.transition_exit_error('cell')
+        else:
+            return self.outof_state(self.States.BODY_CELL)
+        
 
 class TransitionError(Exception):
     def __init__(self, value):
