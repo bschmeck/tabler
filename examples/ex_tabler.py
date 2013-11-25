@@ -8,6 +8,8 @@ table = """<table>
     <th>Last Name</th>
     <th>Phone Number</th>
   </tr>
+</thead>
+<tbody>
   <tr>
     <td>1</td>
     <td>Bob</td>
@@ -20,11 +22,11 @@ table = """<table>
     <td>Newell</td>
     <td>(414) 617-9516</td>
   </tr>
-</thead>
+</tbody>
 </table>"""
 
 parser = Tabler(table)
-print "There are", len(parser.rows()), "rows."
+print "There are", len(parser.body_rows()), " body rows."
 print "First names:"
-for row in parser.rows():
-    print row["first_name"]
+for row in parser.body_rows():
+    print row["First Name"]
