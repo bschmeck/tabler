@@ -12,7 +12,7 @@ table = """<table>
 <tbody>
   <tr>
     <td>1</td>
-    <td>Bob</td>
+    <td><a href="foobar">Bob</a></td>
     <td>Evans</td>
     <td>(847) 332-0461</td>
   </tr>
